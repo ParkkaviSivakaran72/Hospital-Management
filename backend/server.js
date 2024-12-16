@@ -16,6 +16,7 @@ var sweetalert=require('sweetalert2')
 var bodyParser=require('body-parser')
 const http=require('http')
 var signup=require('./signup')
+var login = require('./login')
 
 const app = express()
 app.set('view engine','ejs')
@@ -28,6 +29,7 @@ app.use(bodyParser.json())
 app.use(cookie())
 
 app.use('/signup',signup)
+app.use('/login',login)
 
 // const db=mysql.createConnection({
 //     host:"localhost",

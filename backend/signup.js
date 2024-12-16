@@ -15,7 +15,7 @@ router.post('/',[check('username').notEmpty().withMessage("username is required"
     check('email').notEmpty().withMessage("email is required")
 ],function(req,res){
     const errors = validationResult(req);
-    if(!error.isEmpty()){
+    if(!errors.isEmpty()){
         return res.status(422).json({errors:errors.array()})
     }
     var email_status ="not_verified";

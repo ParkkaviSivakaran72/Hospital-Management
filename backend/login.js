@@ -28,14 +28,38 @@ router.post('/',[check('username').notEmpty().withMessage("username is required"
         return response.status(422).json({errors:errors.array()})
 
     }
-    var email = request.body.email;
+    var username = request.body.username;
     var password = request.body.password;
 
     if(username && password){
         dbconnection.query('select * from users where username = ? , and password = ?',[username,password],
-            
+            function(error,results,fields){
+                if(results.length>0){
+                    request.session.loggedin = true;
+                    request.session.username = username;
+                    response.cookie('username',username)
+                    var status = result[0].email_status
+                    if(status == "not_verified"){
+                        response.send("please verify your email")
+                    }
+                    else{
+                        sweetalert.fire('logged in')
+                        response.redirect('/home')
+                    }
+                }
+                else{
+                    response.send("incorrect username/password")
+                }
+                response.end()
+            }
         )
+    }
+    else{
+        response.send("please enter your username and password")
+        response.end()
     }
 
 
 })
+
+module.exports = router

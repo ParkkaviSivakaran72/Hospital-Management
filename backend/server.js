@@ -17,6 +17,7 @@ var bodyParser=require('body-parser')
 const http=require('http')
 var signup=require('./signup')
 var login = require('./login')
+var verify = require('./verify')
 
 const app = express()
 app.set('view engine','ejs')
@@ -30,6 +31,7 @@ app.use(cookie())
 
 app.use('/signup',signup)
 app.use('/login',login)
+app.use('/verify',verify)
 
 // const db=mysql.createConnection({
 //     host:"localhost",

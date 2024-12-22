@@ -38,3 +38,15 @@ module.exports.updateverify=function(email,email_status,callback){
     dbconnection.query(query,callback)
     console.log(query)
 }
+
+module.exports.findOne = function(email, callback){
+    var query = "select * from users where email = '"+email+"'"
+    dbconnection.query(query,callback)
+    console.log(query)
+}
+
+module.exports.temp = function(id, email, token, callback){
+    var query = "insert into `temp`(`id`,`email`,`token`) values ('"+id+"','"+email+"','"+token+"')"
+    dbconnection.query(query, callback);
+    console.log(query);
+}

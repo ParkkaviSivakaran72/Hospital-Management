@@ -151,3 +151,23 @@ module.exports.edit_leave = function(id, name, leave_type, from, to, reason, cal
     var query = "update `leaves` set `employee`='"+name+"',`leave_type`='"+leave_type+"',`from`='"+from+"',`to`='"+to+"',`reason`='"+reason+"' where id ="+id
     dbconnection.query(query, callback)
 }
+
+module.exports.add_appointment = function(p_name, department, d_name, date, time,email, phone, callback){
+    var query = "insert into appointment (patient_name, department,doctor_name,date,time,email,phone) values('"+p_name+"','"+department+"','"+d_name+"','"+date+"','"+time+"','"+email+"','"+phone+"')"
+    dbconnection.query(query,callback)
+}
+
+module.exports.getallappointment = function(callback){
+    var query = "select * from appointment"
+    dbconnection.query(query,callback)
+}
+
+module.exports.editappointment = function(id, p_name, department, d_name, date, time,email,phone, callback){
+    var query = "update `appointment` set `patient_name`='"+p_name+"',`department`='"+department+"',`d_name`='"+d_name+"',`date`='"+date+"',`time`='"+time+"',`email`='"+email+"',`phone`='"+phone+"' where id ="+id
+    dbconnection.query(query, callback)
+}
+
+module.exports.deleteappointment = function(id, callback){
+    var query= "delete from appointment where id = "+id
+    dbconnection.query(query,callback)
+}

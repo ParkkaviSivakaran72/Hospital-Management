@@ -82,7 +82,7 @@ module.exports.delteDoc = function(id, callback){
 }
 
 module.exports.searchDoc = function(id, callback){
-    var query = "select from where first_name like "%'+key+'%"'"
+    var query = "select * from where first_name like "%'+key+'%"'"
     dbconnection.query(query, callback);
     console.log(query);
 }
@@ -91,4 +91,63 @@ module.exports.getAlldept = function(callback){
     var query = "select * from departments"
     dbconnection.query(query,callback)
     console.log(query)
+}
+
+module.exports.getleavebyid = function(id, callback){
+    var query = "select * from leaves where id = '"+id
+    dbconnection.query(query, callback);
+    console.log(query);
+}
+module.exports.getAllleave = function(callback){
+    var query = "select * from leaves"
+    dbconnection.query(query, callback);
+    console.log(query);
+}
+module.exports.getAllemployee = function(callback){
+    var query = "select * from employee"
+    dbconnection.query(query, callback);
+    console.log(query);
+}
+
+module.exports.add_leave = function(name, id, type, from, to, reason, callback){
+    var query = "insert into `leaves`(`employee`, `emp_id`, `leave_type`, `date_from`, `date_to`, `reason`) values('"+name+"','"+id+"','"+type+"','"+from+"','"+to+"','"+reason+"')"
+    console.log(query)
+    dbconnection.query(query, callback)
+}
+
+module.exports.deleteleave = function(id, callback){
+    var query = "delete from leaves where id = '"+id
+    dbconnection.query(query, callback);
+    console.log(query);
+}
+module.exports.add_employee = function(name, email, contact, join_date, role, salary, callback){
+    var query = "insert into `employee`(`name`, `email`, `contact`, `join_date`, `role`, `salary`) values('"+name+"','"+email+"','"+contact+"','"+join_date+"','"+role+"','"+salary+"')"
+    console.log(query)
+    dbconnection.query(query, callback)
+}
+
+module.exports.searchEmp = function(id, callback){
+    var query = "select * from employee where first_name like "%'+key+'%"'"
+    dbconnection.query(query, callback);
+    console.log(query);
+}
+
+module.exports.deleteEmp = function(id, callback){
+    var query = "delete from employee where id = "+id
+    dbconnection.query(query, callback)
+}
+
+module.exports.editEmp = function(id, name,email, contact, join_date, role, callback){
+    var query = "update `emplopyee` set `name`='"+name+"',`email`='"+email+"',`contact`='"+contact+"',`join_date`='"+join_date+"',`role`='"+role+"' where id ="+id
+    dbconnection.query(query, callback)
+}
+
+module.exports.getEmpbyId = function(id, callback){
+    var query = "select * from employee where id = "+id
+    dbconnection.query(query, callback)
+}
+
+module.exports.edit_leave = function(id, name, leave_type, from, to, reason, callback){
+    var query = "update `leaves` set `employee`='"+name+"',`leave_type`='"+leave_type+"',`from`='"+from+"',`to`='"+to+"',`reason`='"+reason+"' where id ="+id
+    dbconnection.query(query, callback)
 }

@@ -200,3 +200,13 @@ module.exports.searchmed = function(key, callback){
     var query ="select * from where name like '%"+key+"%'"
     dbconnection.query(query, callback)
 }
+
+module.exports.postcomplain = function(message,name,email,subject,callback){
+    var query ="insert into complain (message,name,email,subject) values ('"+message+"','"+name+"','"+email+"','"+subject+"')"
+    dbconnection.query(query,callback)
+}
+
+module.exports.getcomplain = function(callback){
+    var query ="select * from complain"
+    dbconnection.query(query,callback)
+}

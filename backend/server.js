@@ -23,6 +23,8 @@ var doctors =  require('./doctor_controller')
 var employee =  require('./employee_controller')
 var appointment = require('./appointment')
 var store = require('./store')
+var receipt = require('./receipt')
+var complain = require('./complain')
 
 const app = express()
 app.set('view engine','ejs')
@@ -42,6 +44,8 @@ app.use('/doctors',doctors)
 app.use('/employee',employee)
 app.use('/appointment',appointment)
 app.use('/store',store)
+app.use('/receipt',receipt)
+app.use('/complain',complain)
 
 // const db=mysql.createConnection({
 //     host:"localhost",

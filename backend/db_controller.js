@@ -171,3 +171,32 @@ module.exports.deleteappointment = function(id, callback){
     var query= "delete from appointment where id = "+id
     dbconnection.query(query,callback)
 }
+
+module.exports.getallmed = function(callback){
+    var query = "select * from store order by id desc"
+    dbconnection.query(query,callback)
+}
+
+module.exports.addMed = function(name, p_date,expire,e_date,price,quantity,callback){
+    var query = "insert into store(name,p_date,expire,expire_end,price,quantity) values('"+name+"','"+p_date+"','"+expire+"','"+e_date+"','"+price+"','"+quantity+"')"
+    dbconnection.query(query,callback)
+}
+module.exports.getMedbyId = function(id, callback){
+    var query = "select * from store where id = "+id;
+    dbconnection.query(query,callback)
+}
+
+module.exports.editMed = function(name, p_date,expire,e_date,price,quantity,callback){
+    var query = "update store set name = '"+name+"',p_date= '"+p_date+"',expire = '"+expire+"',expire_end = '"+expire_end+"',price = '"+price+"',quantity = '"+quantity+"' where id ="+id 
+    dbconnection.query(query,callback)
+}
+
+module.exports.deletemed = function(id , callback){
+    var query = "delete from store where id ="+id
+    dbconnection.query(query,callback)
+}
+
+module.exports.searchmed = function(key, callback){
+    var query ="select * from where name like '%"+key+"%'"
+    dbconnection.query(query, callback)
+}

@@ -6,6 +6,9 @@ var multer = require('multer')
 var fs = require('fs')
 var path = require('path')
 
+const { check, validationResult } = require('express-validator');
+
+
 module.exports=router
 router.get('*',function(res,req,next){
     if(req.cookies['username']==null){

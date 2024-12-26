@@ -62,18 +62,13 @@ app.use('/complain',complain)
 //     console.log('Connected as id ' + db.threadId);
 //   })
 
-app.get('/',(re,res)=>{
+app.get('/',(req,res)=>{
     return res.json("from backend side");
 })
 
-app.get('/patients',(req,res)=>{
-    const sql="select * from patient";
-    dbconnection.query(sql,(err,data)=>{
-        if(err)
-            return res.json(err);
-        return res.json(data);
-    })
-})
+app.post('/', (req, res) => {
+    res.send('POST request received at /');
+  });
 
 
 const PORT=process.env.PORT||3400

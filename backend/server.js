@@ -22,6 +22,7 @@ var reset = require('./reset_controller')
 var doctors =  require('./doctor_controller')
 var employee =  require('./employee_controller')
 var appointment = require('./appointment')
+var store = require('./store')
 
 const app = express()
 app.set('view engine','ejs')
@@ -40,6 +41,7 @@ app.use('/reset',reset)
 app.use('/doctors',doctors)
 app.use('/employee',employee)
 app.use('/appointment',appointment)
+app.use('/store',store)
 
 // const db=mysql.createConnection({
 //     host:"localhost",

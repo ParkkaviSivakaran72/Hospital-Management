@@ -19,7 +19,7 @@ const SignupForm = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:3400/signup', {
+      const response = await fetch('http://localhost:3400/signup/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -36,7 +36,8 @@ const SignupForm = () => {
         setErrors([]);
       }
     } catch (error) {
-      console.error('Error:', error);
+      // console.error('Error:', error);
+      console.log(error)
       setMessage('An error occurred. Please try again later.');
     }
   };

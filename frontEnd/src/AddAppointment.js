@@ -16,10 +16,10 @@ const AddAppointment = () => {
     const [doctorDetails, setDoctorDetails] = useState(null);
 
     useEffect(() => {
-        fetch('http://localhost:3400/doctors/doctors') // Backend route to fetch doctors
+        fetch('http://localhost:3400/doctors/doctors')
             .then((response) => response.json())
             .then((data) => {
-                setDoctors(data); // Set doctors list
+                setDoctors(data); 
             })
             .catch((error) => console.error('Error fetching doctors:', error));
     }, []);
@@ -32,7 +32,7 @@ const AddAppointment = () => {
 
     const handleDoctorSelect = (doctorId) => {
         
-        fetch(`http://localhost:3400/doctors/doctor/${doctorId}`) // Backend route to fetch doctor details
+        fetch(`http://localhost:3400/doctors/doctor/${doctorId}`) 
             .then((response) => response.json())
             .then((data) => {
                 setDoctorDetails(data); 
@@ -57,15 +57,11 @@ const AddAppointment = () => {
             body: JSON.stringify(form),
         })
             .then((response) => {
-                // Check if the response is ok (status code 200-299)
                 if (!response.ok) {
-                    // If not, handle the error (try to parse error message if available)
                     return response.text().then((text) => {
                         throw new Error(text || 'Error occurred');
                     });
                 }
-                
-                // If response is ok, check if content type is JSON
                 if (response.headers.get('Content-Type').includes('application/json')) {
                     return response.json();
                 } else {
@@ -73,11 +69,9 @@ const AddAppointment = () => {
                 }
             })
             .then((data) => {
-                // If the response is JSON, show the success message
                 setAlert({ message: data.message, type: 'success' });
             })
             .catch((error) => {
-                // Display error message if anything fails
                 setAlert({ message: error.message, type: 'error' });
             });
     };

@@ -5,14 +5,14 @@ var db = require.main.require('./db_controller')
 
 
 
-router.get('*', function(req, res, next){
-    if(req.cookies['username']==null){
-        res.redirect('/login')
-    }
-    else{
-        next()
-    }
-})
+// router.get('*', function(req, res, next){
+//     if(req.cookies['username']==null){
+//         res.redirect('/login')
+//     }
+//     else{
+//         next()
+//     }
+// })
 
 router.get('/',function(req,res){
     db.getallappointment(function(err,result){
@@ -75,4 +75,12 @@ router.post('/delete_appointment/:id', function(req,res){
     })
 })
 
+router.get('/departments',(req,res) => {
+    db.getDepartment(function(err,departments) {
+        if(err){
+            res.status(500).json({message:'Failed to fetch depatments'})
+        }
+        res.json(departments)
+    })
+})
 module.exports = router

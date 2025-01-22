@@ -7,7 +7,7 @@ const bodyParser=require('body-parser')
 module.exports.signup=function(username,email,password,email_status,callback){
     dbconnection.query(`select email from users where email=${email}`,
     function(err,result){
-        if(result[0]==undefined){
+        if(result==undefined){
             var query=`insert into users(username, email,password,email_status) values (${username},${email},${password},${email_status})`
             console.log(query);
         }
@@ -20,12 +20,12 @@ module.exports.signup=function(username,email,password,email_status,callback){
 }
 
 module.exports.verify=function(username,email,token,callback){
-    var query="insert into `verify`(`username`,`email`,`token`) values (`${username},${email},${token}`)"
+    var query=`insert into verify(username,email,token) values ('${username}','${email}','${token}')`
     dbconnection.query(query,callback)
 }
 
 module.exports.getuserid=function(email,callback){
-    var query="select * from `verify` where email = `${email}`"
+    var query=`select * from verify where email = '${email}'`
     dbconnection.query(query,callback)
 }
 
@@ -35,7 +35,7 @@ module.exports.matchtoken=function(id,token,callback){
     console.log(query)
 }
 module.exports.updateverify=function(email,email_status,callback){
-    var query="update `users` set `email_status` = '"+email_status+"' where `email` = '"+email_status+"'"
+    var query=`update users set email_status = '`+email_status+`' where email= '`+email_status+`'`
     dbconnection.query(query,callback)
     console.log(query)
 }
@@ -224,4 +224,8 @@ module.exports.postcomplain = function(message,name,email,subject,callback){
 module.exports.getcomplain = function(callback){
     var query ="select * from complain"
     dbconnection.query(query,callback)
+}
+
+module.exports.getDepartment = function(callback){
+    var query = `SELECT * FROM departments`
 }

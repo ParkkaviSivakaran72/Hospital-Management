@@ -6,15 +6,15 @@ var multer = require('multer')
 var fs = require('fs')
 var path = require('path')
 
-router.get('*',function(res,req,next){
-    if(req.cookies['username']==null){
-        res.redirect('/login')
-    }
-    else{
-        next()
-    }
+// router.get('*',function(req,res,next){
+//     if(req.cookies['username']==null){
+//         res.redirect('/login')
+//     }
+//     else{
+//         next()
+//     }
 
-})
+// })
 var storage = multer.diskStorage({
     destination: function(req, file, cb){
         cb(null, "public/assets/images/upload_images")
@@ -26,12 +26,7 @@ var storage = multer.diskStorage({
 })
 var upload = multer({storage:storage})
 
-router.get('/',function(req,res){
-    if(err){
-        throw err
-    }
-    res.render('doctors.ejs',{list:result})
-})
+
 
 router.use(bodyParser.urlencoded({extended:true}))
 router.use(bodyParser.json())
@@ -75,13 +70,13 @@ router.post('/delete_doctor/:id',function(req,res){
     })
 })
 
-router.get('/',function(req,res){
-    db.getAllDoc(function(err,result){
-        if(err)
-            throw err;
-        res.render('doctor.ejs',{list:result})
-    })
-})
+// router.get('/',function(req,res){
+//     db.getAllDoc(function(err,result){
+//         if(err)
+//             throw err;
+//         res.render('doctor.ejs',{list:result})
+//     })
+// })
 
 router.post('/search', function(req,res){
     var key = req.body.search;
@@ -90,5 +85,27 @@ router.post('/search', function(req,res){
         res.render('doctor.ejs',{list:result})
     })
 })
+
+
+router.get('/doctors', function(req, res) {
+    db.getAlldoc(function(err, doctors) {
+        if (err) {
+            return res.status(500).json({ message: 'Failed to fetch doctors' });
+        }
+        res.json(doctors); // Send list of doctors to the frontend
+    });
+});
+
+
+router.get('/doctor/:id', function(req, res) {
+    const doctorId = Number(req.params.id);
+    db.getDocbyId(doctorId, function(err, doctor) {
+        if (err) {
+            return res.status(500).json({ message: 'Failed to fetch doctor details' });
+        }
+        res.json(doctor); // Send doctor details to the frontend
+    });
+});
+
 
 module.exports = router

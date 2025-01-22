@@ -4,15 +4,16 @@ const router=express.Router();
 const dbconnection = require('./dbconnection');
 const bodyParser=require('body-parser')
 
-module.exports.signup=function(username,email,password,status,callback){
-    dbconnection.query('select email from users where email=`${email}`',
+module.exports.signup=function(username,email,password,email_status,callback){
+    dbconnection.query(`select email from users where email=${email}`,
     function(err,result){
         if(result[0]==undefined){
-            var query="insert into `users`(`username`, `email`,`password`,`email_status`) values (`${username},${email},${password},${email_status}`)"
+            var query=`insert into users(username, email,password,email_status) values (${username},${email},${password},${email_status})`
             console.log(query);
         }
         else{
             console.log("error")
+            console.log(err)
         }
     }
 )
@@ -64,7 +65,7 @@ module.exports.getAlldoc = function(callback){
 }
 
 module.exports.getDocbyId = function(id, callback){
-    var query = "select * from doctor where id = '"+id+"'"
+    var query = "select first_name,last_name,department,email,phone from doctor where id = "+id
     dbconnection.query(query, callback);
     console.log(query);
 }
@@ -152,18 +153,32 @@ module.exports.edit_leave = function(id, name, leave_type, from, to, reason, cal
     dbconnection.query(query, callback)
 }
 
-module.exports.add_appointment = function(p_name, department, d_name, date, time,email, phone, callback){
-    var query = "insert into appointment (patient_name, department,doctor_name,date,time,email,phone) values('"+p_name+"','"+department+"','"+d_name+"','"+date+"','"+time+"','"+email+"','"+phone+"')"
-    dbconnection.query(query,callback)
-}
+module.exports.add_appointment = function(p_name, department, doctor_id, date, time, email, phone, callback) {
+    const currentDate = new Date();
+    const appointmentDate = new Date(date); 
+
+    if (appointmentDate < currentDate) {
+        return callback({ message: "Error: You cannot book an appointment for a past date." }, null);
+    }
+
+    var query = "INSERT INTO appointment (patient_name, department, doctor_id, date, time, email, phone) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    
+    dbconnection.query(query, [p_name, department, doctor_id, date, time, email, phone], (err, result) => {
+        if (err) {
+            return callback({ message: "Database error: " + err.message }, null);
+        }
+        callback(null, { message: "Appointment added successfully!" });
+    });
+};
+
 
 module.exports.getallappointment = function(callback){
     var query = "select * from appointment"
     dbconnection.query(query,callback)
 }
 
-module.exports.editappointment = function(id, p_name, department, d_name, date, time,email,phone, callback){
-    var query = "update `appointment` set `patient_name`='"+p_name+"',`department`='"+department+"',`d_name`='"+d_name+"',`date`='"+date+"',`time`='"+time+"',`email`='"+email+"',`phone`='"+phone+"' where id ="+id
+module.exports.editappointment = function(id, p_name, department, doctor_id, date, time,email,phone, callback){
+    var query = "update `appointment` set `patient_name`='"+p_name+"',`department`='"+department+"',`doctor_id`='"+doctor_id+"',`date`='"+date+"',`time`='"+time+"',`email`='"+email+"',`phone`='"+phone+"' where id ="+id
     dbconnection.query(query, callback)
 }
 

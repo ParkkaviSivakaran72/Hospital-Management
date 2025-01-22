@@ -10,12 +10,18 @@ const {check,validationResult}=require('express-validator')
 router.use(bodyParser.urlencoded({extended:true}))
 router.use(bodyParser.json())
 
-router.post('/',[check('username').notEmpty().withMessage("username is required"),
+router.get('/signup',(res,req) => {
+    res.status(200).send({ message: 'Signup endpoint is ready' });
+})
+
+router.post('/signup',[check('username').notEmpty().withMessage("username is required"),
     check('password').notEmpty().withMessage("password is required"),
     check('email').notEmpty().withMessage("email is required")
 ],function(req,res){
     const errors = validationResult(req);
+    console.log(errors)
     if(!errors.isEmpty()){
+        console.log(errors)
         return res.status(422).json({errors:errors.array()})
     }
     var email_status ="not_verified";

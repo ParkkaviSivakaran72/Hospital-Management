@@ -19,7 +19,7 @@ const SignupForm = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:3400/', {
+      const response = await fetch('http://localhost:3400/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

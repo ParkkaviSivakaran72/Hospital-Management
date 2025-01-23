@@ -61,8 +61,11 @@ router.get('/edit_appointment/:id',function(req,res){
 })
 router.post('/edit_appointment/:id', function(req, res) {
     var appointmentId = req.params.id;
-    var { patient_name, department,  date, time, email, phone,doctor_id } = req.body;
-    db.editappointment(appointmentId, patient_name, department,  date, time, email, phone,doctor_id, function(err, result) {
+    // var { patient_name, department,  date, time, email, phone,doctor_id } = req.body;
+    // const formattedDate = new Date(date).toISOString().split('T')[0]; // Convert to YYYY-MM-DD
+    // console.log(formattedDate)
+
+    db.editappointment(appointmentId, req.body.patient_name, req.body.department,  req.body.date, req.body.time, req.body.email, req.body.phone,req.body.doctor_id, function(err, result) {
         if (err) {
             console.error(err);
             return res.status(500).json({ message: 'Failed to edit appointment.' });

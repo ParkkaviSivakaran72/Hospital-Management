@@ -185,11 +185,59 @@ module.exports.getappointmentbyid = function(id,callback){
     var query = `SELECT * FROM appointment WHERE id=${id}`;
     dbconnection.query(query,callback);
 }
-module.exports.editappointment = function(id, patient_name, department,  date, time, email, phone,doctor_id, callback) {
-    
-    var query = `UPDATE appointment SET patient_name = ?, department = ?,  date = ?, time = ?, email = ?, phone = ? ,doctor_id = ? WHERE id = ?`;
-    dbconnection.query(query, [patient_name, department,  date, time, email, phone,doctor_id, id], callback);
-}
+module.exports.editappointment = function (
+    id,
+    patient_name,
+    department,
+    doctor_id,
+    date,
+    time,
+    email,
+    phone,
+    callback
+) {
+    console.log('Updating appointment with the following data:');
+    console.log('ID:', id);
+    console.log('Patient Name:', patient_name);
+    console.log('Department:', department);
+    console.log('Doctor ID:', doctor_id);
+    console.log('Date:', date);
+    console.log('Time:', time);
+    console.log('Email:', email);
+    console.log('Phone:', phone);
+
+    // Parse and validate date and time
+    const formattedDate = new Date(date); // date must be in ISO format (YYYY-MM-DDTHH:mm:ss)
+    if (isNaN(formattedDate)) {
+        return callback(new Error('Invalid date format.'));
+    }
+
+    // Combine date and time
+    const combinedDateTime = `${formattedDate.toISOString().split('T')[0]}T${time}`;
+    const finalDateTime = new Date(combinedDateTime);
+
+    if (isNaN(finalDateTime)) {
+        return callback(new Error('Invalid combined date and time.'));
+    }
+
+    // SQL query to update the appointment
+    const query = `UPDATE appointment 
+                   SET patient_name = ?, 
+                       department = ?, 
+                       date = ?, 
+                       time = ?, 
+                       email = ?, 
+                       phone = ?, 
+                       doctor_id = ? 
+                   WHERE id = ?`;
+
+    dbconnection.query(
+        query,
+        [patient_name, department, finalDateTime, time, email, phone, doctor_id, id],
+        callback
+    );
+};
+
 
 
 module.exports.deleteappointment = function(id, callback){

@@ -14,7 +14,7 @@ var db = require.main.require('./db_controller')
 //     }
 // })
 
-router.get('/',function(req,res){
+router.get('/get_appointments',function(req,res){
     db.getallappointment(function(err,result){
         console.log(result)
         res.render('appointment.ejs',{list:result})
@@ -86,7 +86,14 @@ router.get('/delete_appointment/:id', function(req,res){
 router.post('/delete_appointment/:id', function(req,res){
     var id = req.params.id;
     db.deleteappointment(id, function(err, result){
-        res.redirect('/appointment')
+        if (err) {
+            console.error('Error deleting appointment:', err);
+            res.status(500).json({ message: 'Failed to delete appointment.' });
+        } else if (result.affectedRows === 0) {
+            res.status(404).json({ message: 'Appointment not found.' });
+        } else {
+            res.status(200).json({ message: 'Appointment deleted successfully!' });
+        }
     })
 })
 

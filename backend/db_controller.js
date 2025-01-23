@@ -64,6 +64,10 @@ module.exports.getAlldoc = function(callback){
     console.log(query)
 }
 
+module.exports.getDocbyDep = function(dep_id,callback){
+    var query = `SELECT de.id,d.* FROM doctor d JOIN departments de ON de.department_name=d.department WHERE de.id = `+dep_id
+    dbconnection.query(query,callback)
+}
 module.exports.getDocbyId = function(id, callback){
     var query = "select first_name,last_name,department,email,phone from doctor where id = "+id
     dbconnection.query(query, callback);
@@ -227,5 +231,11 @@ module.exports.getcomplain = function(callback){
 }
 
 module.exports.getDepartment = function(callback){
-    var query = `SELECT * FROM departments`
+    var query = `SELECT DISTINCT de.id,  d.department,de.department_desc FROM doctor d JOIN departments de on de.department_name= d.department`
+    dbconnection.query(query,callback)
+}
+
+module.exports.getDepByName = function(dep_id,callback){
+    var query = `SELECT de.id,d.department,de.department_desc FROM doctor d JOIN departments de on de.department_name= d.department WHERE de.id = `+dep_id
+    dbconnection.query(query,callback);
 }

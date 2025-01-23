@@ -70,13 +70,13 @@ router.post('/delete_doctor/:id',function(req,res){
     })
 })
 
-// router.get('/',function(req,res){
-//     db.getAllDoc(function(err,result){
-//         if(err)
-//             throw err;
-//         res.render('doctor.ejs',{list:result})
-//     })
-// })
+router.get('/doctors',function(req,res){
+    db.getAllDoc(function(err,result){
+        if(err)
+            throw err;
+        res.json(result)
+    })
+})
 
 router.post('/search', function(req,res){
     var key = req.body.search;
@@ -87,8 +87,9 @@ router.post('/search', function(req,res){
 })
 
 
-router.get('/doctors', function(req, res) {
-    db.getAlldoc(function(err, doctors) {
+router.get('/doctors/:dep_id', function(req, res) {
+    const depId = Number(req.params.dep_id)
+    db.getDocbyDep(depId,function(err, doctors) {
         if (err) {
             return res.status(500).json({ message: 'Failed to fetch doctors' });
         }

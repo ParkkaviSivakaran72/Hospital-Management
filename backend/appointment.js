@@ -78,9 +78,21 @@ router.post('/delete_appointment/:id', function(req,res){
 router.get('/departments',(req,res) => {
     db.getDepartment(function(err,departments) {
         if(err){
+            console.log(err)
             res.status(500).json({message:'Failed to fetch depatments'})
         }
         res.json(departments)
     })
 })
+
+router.get('/departments/:dep_id', function(req, res) {
+    const dep_id=Number(req.params.dep_id);
+    db.getDepByName(dep_id, function(err, department) {
+        if (err) {
+            return res.status(500).json({ message: 'Failed to fetch department details' });
+        }
+        res.json(department); // Send doctor details to the frontend
+    });
+});
+
 module.exports = router

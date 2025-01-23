@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Alert from './Alert';
 
 const AddAppointment = () => {
@@ -13,37 +13,59 @@ const AddAppointment = () => {
     });
     const [alert, setAlert] = useState({ message: '', type: '' });
     const [doctors, setDoctors] = useState([]);
+    const [alldoctors,setAllDoctors] = useState([]);
     const [doctorDetails, setDoctorDetails] = useState(null);
+    const [departments, setDepartments] = useState([]);
+    const [departmentDesc, setDepartmentDesc] = useState(null);
 
     useEffect(() => {
         fetch('http://localhost:3400/doctors/doctors')
             .then((response) => response.json())
             .then((data) => {
-                setDoctors(data); 
-            })
-            .catch((error) => console.error('Error fetching doctors:', error));
+                setAllDoctors(data)
+                setDoctors(data)})
+            .catch((error) => console.error('Error fetching departments:', error));
     }, []);
-    useEffect(() => {
-        if (doctorDetails) {
-            console.log("Doctor details updated:", doctorDetails);
-        }
-    }, [doctorDetails]);
-    
 
+
+    // Fetch departments once on component mount
+    useEffect(() => {
+        fetch('http://localhost:3400/appointment/departments')
+            .then((response) => response.json())
+            .then((data) => setDepartments(data))
+            .catch((error) => console.error('Error fetching departments:', error));
+    }, []);
+
+    // Fetch doctor details when a doctor is selected
     const handleDoctorSelect = (doctorId) => {
-        
-        fetch(`http://localhost:3400/doctors/doctor/${doctorId}`) 
+        fetch(`http://localhost:3400/doctors/doctor/${doctorId}`)
+            .then((response) => response.json())
+            .then((data) => setDoctorDetails(data))
+            .catch((error) => console.error('Error fetching doctor details:', error));
+    };
+
+    // Fetch department description when a department is selected
+    const handleDepSelect = (dep_id) => {
+        fetch(`http://localhost:3400/appointment/departments/${dep_id}`)
             .then((response) => response.json())
             .then((data) => {
-                setDoctorDetails(data); 
-                // setForm({ ...form, [e.target.name]: e.target.value });
-                console.log(data);
-                console.log(doctorDetails)
-            })
-            .catch((error) => console.error('Error fetching doctor details:', error));
-            
+                setDepartmentDesc(data)
+                console.log(departmentDesc)
+                console.log(data)})
+            .catch((error) => {
+                console.error('Error fetching department description:', error)
+                console.log(error)});
     };
-    
+    const handleDocSelectByDep = (dep_id)=>{
+        fetch(`http://localhost:3400/doctors/doctors/${dep_id}`)
+            .then((response) => response.json())
+            .then((data) => {
+                setDoctors(data)
+            })
+            .catch((error) => {
+                console.error('Error fetching doctors from department',error)
+            })
+    }
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
@@ -62,11 +84,7 @@ const AddAppointment = () => {
                         throw new Error(text || 'Error occurred');
                     });
                 }
-                if (response.headers.get('Content-Type').includes('application/json')) {
-                    return response.json();
-                } else {
-                    throw new Error('Unexpected response type');
-                }
+                return response.json();
             })
             .then((data) => {
                 setAlert({ message: data.message, type: 'success' });
@@ -81,32 +99,79 @@ const AddAppointment = () => {
             <Alert message={alert.message} type={alert.type} />
             <form onSubmit={handleSubmit}>
                 <h1>Add Appointment</h1>
-                <input name="p_name" placeholder="Patient Name" onChange={handleChange} required />
-                <input name="department" placeholder="Department" onChange={handleChange} required />
-                <select name= "doctor_id" onChange={(e) => {handleDoctorSelect(e.target.value);handleChange(e);}} defaultValue="">
-                    <option value="" disabled>Select a Doctor</option>
-                    {doctors.map((doctor) => (
-                        <option key={doctor.id} value={doctor.id}>
-                            {doctor.first_name} {doctor.last_name} ({doctor.department})
-                        </option>
-                    ))}
-                </select>
-                {doctorDetails &&  (
-                    <div>
-                        <h2>Doctor Details</h2>
-                        <p>Name: {doctorDetails[0].first_name} {doctorDetails.last_name}</p>
-                        <p>Department: {doctorDetails[0].department}</p>
-                        <p>Email: {doctorDetails[0].email}</p>
-                        <p>Phone: {doctorDetails[0].phone}</p>
-                        
-                    </div>
-                )}
-                 
-                <input type="date" name="date" onChange={handleChange} required />
-                <input type="time" name="time" onChange={handleChange} required />
-                <input type="email" name="email" placeholder="Email" onChange={handleChange} required />
-                <input type="tel" name="phone" placeholder="Phone" onChange={handleChange} required />
-                <button type="submit">Add</button>
+                <div>
+                    <input 
+                        name="p_name" 
+                        placeholder="Patient Name" 
+                        onChange={handleChange} 
+                        required 
+                    />
+                </div>
+                <div>
+                    <select
+                        name="department"
+                        onChange={(e) => {
+                            handleDepSelect(e.target.value);
+                            handleDocSelectByDep(e.target.value);
+                            handleChange(e);
+                        }}
+                        defaultValue=""
+                    >
+                        <option value="" disabled>Select a department</option>
+                        {departments.map((department) => (
+                            <option key={department.id} value={department.id}>
+                                {department.department}
+                            </option>
+                        ))}
+                    </select>
+
+                    {departmentDesc && (
+                        <div>
+                            <p>Description: {departmentDesc[0]?.department_desc || 'No description available'}</p>
+                        </div>
+                    )}
+                </div>
+                <div>
+                    <select
+                        name="doctor_id"
+                        onChange={(e) => {
+                            handleChange(e);
+                            handleDoctorSelect(e.target.value);
+                        }}
+                        defaultValue=""
+                    >
+                        <option value="" disabled>Select a Doctor</option>
+                        {doctors.map((doctor) => (
+                            <option key={doctor.id} value={doctor.id}>
+                                {doctor.first_name} {doctor.last_name} ({doctor.department})
+                            </option>
+                        ))}
+                    </select>
+
+                    {doctorDetails && doctorDetails[0] && (
+                        <div>
+                            <p>Name: {doctorDetails[0].first_name} {doctorDetails[0].last_name}</p>
+                            <p>Department: {doctorDetails[0].department}</p>
+                            <p>Email: {doctorDetails[0].email}</p>
+                            <p>Phone: {doctorDetails[0].phone}</p>
+                        </div>
+                    )}
+                </div>
+                <div>
+                    <input type="date" name="date" onChange={handleChange} required />
+                </div>
+                <div>
+                    <input type="time" name="time" onChange={handleChange} required />
+                </div>
+                <div>
+                    <input type="email" name="email" placeholder="Email" onChange={handleChange} required />
+                </div>
+                <div>
+                    <input type="tel" name="phone" placeholder="Phone" onChange={handleChange} required />
+                </div>
+                <div>
+                    <button type="submit">Add</button>
+                </div>
             </form>
         </div>
     );

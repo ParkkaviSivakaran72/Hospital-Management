@@ -48,8 +48,12 @@ router.post('/add_appointment',function(req,res){
 router.get('/edit_appointment/:id',function(req,res){
     var id = req.params.id;
     db.getappointmentbyid(id, function(err,result){
+        if(err){
+            console.log(err)
+        }
         console.log(result)
-        res.render('edit_appointment.ejs',{list:result})
+        // res.render('edit_appointment.ejs',{list:result})
+        res.json(result)
     })
 })
 router.post('/edit_appointment/:id',function(req,res){

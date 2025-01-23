@@ -71,7 +71,7 @@ router.post('/delete_doctor/:id',function(req,res){
 })
 
 router.get('/doctors',function(req,res){
-    db.getAllDoc(function(err,result){
+    db.getAlldoc(function(err,result){
         if(err)
             throw err;
         res.json(result)

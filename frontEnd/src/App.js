@@ -19,7 +19,8 @@ function App() {
     
         <nav>
             <Link to="/">Appointments</Link> | 
-            <Link to="/add_appointment">Add Appointment</Link>
+            <Link to="/add_appointment">Add Appointment</Link> | 
+            <Link to ="/edit_appointment/:id">Edit Appointment</Link>
         </nav>
         <Routes>
             <Route path="/" element={<AppointmentList />} />

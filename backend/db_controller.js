@@ -181,6 +181,10 @@ module.exports.getallappointment = function(callback){
     dbconnection.query(query,callback)
 }
 
+module.exports.getappointmentbyid = function(id,callback){
+    var query = `SELECT * FROM appointment WHERE id=${id}`;
+    dbconnection.query(query,callback);
+}
 module.exports.editappointment = function(id, p_name, department, doctor_id, date, time,email,phone, callback){
     var query = "update `appointment` set `patient_name`='"+p_name+"',`department`='"+department+"',`doctor_id`='"+doctor_id+"',`date`='"+date+"',`time`='"+time+"',`email`='"+email+"',`phone`='"+phone+"' where id ="+id
     dbconnection.query(query, callback)

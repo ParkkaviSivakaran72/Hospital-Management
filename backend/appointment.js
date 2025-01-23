@@ -23,6 +23,7 @@ router.get('/',function(req,res){
 
 router.get('/add_appointment', function(req,res){
     res.render('add_appointment.ejs')
+    
 })
 
 router.post('/add_appointment',function(req,res){
@@ -35,9 +36,10 @@ router.post('/add_appointment',function(req,res){
   
         return res.status(400).json({message:'Error: You cannot book an appointment for a past date.'});
     }
-    db.add_appointment(req.body.p_name, req.body.department, req.body.d_name, req.body.date, req.body.time, req.body.email, req.body.phone,
+    db.add_appointment(req.body.patient_name, req.body.department, req.body.doctor_id, req.body.date, req.body.time, req.body.email, req.body.phone,
         function(err, result){
             if (err) {
+                console.log(err)
                 return res.status(500).json({ message: 'Failed to add appointment.' });
             }
             res.status(200).json({ message: 'Appointment added successfully!' });
@@ -46,23 +48,29 @@ router.post('/add_appointment',function(req,res){
 })
 
 router.get('/edit_appointment/:id',function(req,res){
-    var id = req.params.id;
-    db.getappointmentbyid(id, function(err,result){
+    var appointmentId = req.params.id;
+    db.getappointmentbyid(appointmentId, function(err,result){
         if(err){
-            console.log(err)
+            // console.log(err)
+            
         }
         console.log(result)
         // res.render('edit_appointment.ejs',{list:result})
         res.json(result)
     })
 })
-router.post('/edit_appointment/:id',function(req,res){
-    var id = req.params.id;
-    db.editappointment(id, function(err,result){
-        
-        res.redirect('/appointment')
-    })
-})
+router.post('/edit_appointment/:id', function(req, res) {
+    var appointmentId = req.params.id;
+    var { patient_name, department,  date, time, email, phone,doctor_id } = req.body;
+    db.editappointment(appointmentId, patient_name, department,  date, time, email, phone,doctor_id, function(err, result) {
+        if (err) {
+            console.error(err);
+            return res.status(500).json({ message: 'Failed to edit appointment.' });
+        }
+        res.status(200).json({ message: 'Appointment edited successfully!' });
+    });
+});
+
 
 router.get('/delete_appointment/:id', function(req,res){
     var id = req.params.id;
@@ -93,6 +101,7 @@ router.get('/departments/:dep_id', function(req, res) {
     const dep_id=Number(req.params.dep_id);
     db.getDepByName(dep_id, function(err, department) {
         if (err) {
+            console.log(err)
             return res.status(500).json({ message: 'Failed to fetch department details' });
         }
         res.json(department); // Send doctor details to the frontend

@@ -25,7 +25,7 @@ function App() {
         <Routes>
             <Route path="/" element={<AppointmentList />} />
             <Route path="/add_appointment" element={<AddAppointment />} />
-            <Route path="/edit_appointment/:id" element={<EditAppointment />} />
+            <Route path="/edit_appointment/:id" element={<EditAppointment appointmentId="21"/>} />
             <Route path="/delete_appointment/:id" element={<DeleteAppointment />} />
         </Routes>
     </Router>

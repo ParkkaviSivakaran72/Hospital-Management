@@ -157,7 +157,7 @@ module.exports.edit_leave = function(id, name, leave_type, from, to, reason, cal
     dbconnection.query(query, callback)
 }
 
-module.exports.add_appointment = function(p_name, department, doctor_id, date, time, email, phone, callback) {
+module.exports.add_appointment = function(patient_name, department, doctor_id, date, time, email, phone, callback) {
     const currentDate = new Date();
     const appointmentDate = new Date(date); 
 
@@ -167,7 +167,7 @@ module.exports.add_appointment = function(p_name, department, doctor_id, date, t
 
     var query = "INSERT INTO appointment (patient_name, department, doctor_id, date, time, email, phone) VALUES (?, ?, ?, ?, ?, ?, ?)";
     
-    dbconnection.query(query, [p_name, department, doctor_id, date, time, email, phone], (err, result) => {
+    dbconnection.query(query, [patient_name, department, doctor_id, date, time, email, phone], (err, result) => {
         if (err) {
             return callback({ message: "Database error: " + err.message }, null);
         }
@@ -185,13 +185,16 @@ module.exports.getappointmentbyid = function(id,callback){
     var query = `SELECT * FROM appointment WHERE id=${id}`;
     dbconnection.query(query,callback);
 }
-module.exports.editappointment = function(id, p_name, department, doctor_id, date, time,email,phone, callback){
-    var query = "update `appointment` set `patient_name`='"+p_name+"',`department`='"+department+"',`doctor_id`='"+doctor_id+"',`date`='"+date+"',`time`='"+time+"',`email`='"+email+"',`phone`='"+phone+"' where id ="+id
-    dbconnection.query(query, callback)
+module.exports.editappointment = function(id, patient_name, department,  date, time, email, phone,doctor_id, callback) {
+    
+    var query = `UPDATE appointment SET patient_name = ?, department = ?,  date = ?, time = ?, email = ?, phone = ? ,doctor_id = ? WHERE id = ?`;
+    dbconnection.query(query, [patient_name, department,  date, time, email, phone,doctor_id, id], callback);
 }
+
 
 module.exports.deleteappointment = function(id, callback){
     var query= "delete from appointment where id = "+id
+
     dbconnection.query(query,callback)
 }
 

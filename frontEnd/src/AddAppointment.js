@@ -135,8 +135,9 @@ const AddAppointment = () => {
                     <select
                         name="doctor_id"
                         onChange={(e) => {
-                            handleChange(e);
+                            
                             handleDoctorSelect(e.target.value);
+                            handleChange(e);
                         }}
                         defaultValue=""
                     >

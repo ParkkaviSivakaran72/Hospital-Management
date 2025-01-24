@@ -24,7 +24,7 @@ router.get('/',function(req,res){
     
 })
 
-router.post('/',function(req,res){
+router.post('/postcomplain',function(req,res){
     var message = req.body.message;
     var name= req.body.name;
     var email = req.body.email;

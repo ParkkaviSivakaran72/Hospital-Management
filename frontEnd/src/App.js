@@ -8,6 +8,7 @@ import AddAppointment from './AddAppointment';
 import EditAppointment from './EditAppointment';
 import DeleteAppointment from './DeleteAppointment';
 import ComplaintList from './ComplaintList'
+import ComplaintForm from './ComplaintForm'
 
 
 function App() {
@@ -22,12 +23,13 @@ function App() {
         <nav>
             <Link to="/get_appointments">Appointments</Link> | 
        
-            <Link to="/add_appointment">Add Appointment</Link> | 
-            <Link to ="/edit_appointment/:id">Edit Appointment</Link>
-            <Link to = "/delete_appointment/:id">Delete Appointment</Link>
+            <Link to="/add_appointment"> Add Appointment</Link> | 
+            <Link to ="/edit_appointment/:id"> Edit Appointment</Link> |
+            <Link to = "/delete_appointment/:id"> Delete Appointment</Link>
         </nav>
         <nav>
-          <Link to="/complain">All Complain</Link>
+          <Link to="/complain">All Complain</Link> |
+          <Link to="/postcomplain"> Post Complain</Link>
         </nav>
         <Routes>
             <Route path="/get_appointments" element={<AppointmentList />} />
@@ -36,6 +38,7 @@ function App() {
             <Route path="/edit_appointment/:id" element={<EditAppointment appointmentId="21"/>} />
             <Route path="/delete_appointment/:id" element={<DeleteAppointment />} />
             <Route path="/complain" element={<ComplaintList />} />
+            <Route path="/postcomplain" element={<ComplaintForm />} />
         </Routes>
     </Router>
   );

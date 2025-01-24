@@ -3,17 +3,25 @@ var router = express.Router()
 var bodyParser = require('body-parser')
 var db = require.main.require('./db_controller')
 
-router.get('*', function(res,req,next){
-    if(req.cookies['username'] == null){
-        res.redirect('/login')
-    }
-    else{
-        next()
-    }
-})
+// router.get('*', function(res,req,next){
+//     if(req.cookies['username'] == null){
+//         res.redirect('/login')
+//     }
+//     else{
+//         next()
+//     }
+// })
 
 router.get('/',function(req,res){
-    res.render('complain.ejs')
+    // res.render('complain.ejs')
+    db.getcomplain(function(err,result){
+        if(err){
+            console.log(err)
+            res.status(200).json({Message:'Failed to complain'})
+        }
+        res.json(result);
+    })
+    
 })
 
 router.post('/',function(req,res){

@@ -16,8 +16,12 @@ var db = require.main.require('./db_controller')
 
 router.get('/get_appointments',function(req,res){
     db.getallappointment(function(err,result){
-        console.log(result)
-        res.render('appointment.ejs',{list:result})
+        if(err){
+            console.log(err)
+            return res.status(500).json({ message: 'Failed to get appointment.' });
+        }
+        // res.status(200).json({ message: 'Appointment got successfully!' });
+        res.json(result)
     })
 })
 
@@ -75,6 +79,33 @@ router.post('/edit_appointment/:id', function(req, res) {
 });
 
 
+  
+  // Edit appointment
+router.put('/api/appointments/:id', async (req, res) => {
+    const { id } = req.params;
+    const { details } = req.body;
+  
+    try {
+      await pool.query('UPDATE appointments SET details = $1 WHERE id = $2', [details, id]);
+      res.send('Appointment updated successfully');
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Server Error');
+    }
+});
+  
+  // Delete appointment
+router.delete('/api/appointments/:id', async (req, res) => {
+    const { id } = req.params;
+  
+    try {
+      await pool.query('DELETE FROM appointments WHERE id = $1', [id]);
+      res.send('Appointment deleted successfully');
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Server Error');
+    }
+});
 router.get('/delete_appointment/:id', function(req,res){
     var id = req.params.id;
     db.getallappointmentbyid(id, function(err,result){

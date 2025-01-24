@@ -177,7 +177,7 @@ module.exports.add_appointment = function(patient_name, department, doctor_id, d
 
 
 module.exports.getallappointment = function(callback){
-    var query = "select * from appointment"
+    var query = "select a.id, a.patient_name,de.department,d. from appointment"
     dbconnection.query(query,callback)
 }
 

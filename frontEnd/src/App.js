@@ -8,6 +8,7 @@ import AddAppointment from './AddAppointment';
 import EditAppointment from './EditAppointment';
 import DeleteAppointment from './DeleteAppointment';
 
+
 function App() {
   return (
     <Router>
@@ -18,13 +19,15 @@ function App() {
       </Routes>
     
         <nav>
-            <Link to="/">Appointments</Link> | 
+            <Link to="/get_appointments">Appointments</Link> | 
+       
             <Link to="/add_appointment">Add Appointment</Link> | 
             <Link to ="/edit_appointment/:id">Edit Appointment</Link>
             <Link to = "/delete_appointment/:id">Delete Appointment</Link>
         </nav>
         <Routes>
-            <Route path="/" element={<AppointmentList />} />
+            <Route path="/get_appointments" element={<AppointmentList />} />
+            
             <Route path="/add_appointment" element={<AddAppointment />} />
             <Route path="/edit_appointment/:id" element={<EditAppointment appointmentId="21"/>} />
             <Route path="/delete_appointment/:id" element={<DeleteAppointment />} />

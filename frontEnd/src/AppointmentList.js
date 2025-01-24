@@ -34,8 +34,8 @@ const AppointmentList = () => {
                         <tr key={appointment.id}>
                             <td>{appointment.id}</td>
                             <td>{appointment.patient_name}</td>
-                            <td>{appointment.department}</td>
-                            <td>{appointment.doctor_id}</td>
+                            <td>{appointment.department_name}</td>
+                            <td>{appointment.Doctor_name}</td>
                             <td>{appointment.date}</td>
                             <td>{appointment.time}</td>
                             <td>

@@ -3,7 +3,7 @@ import Alert from './Alert';
 
 const AddAppointment = () => {
     const [form, setForm] = useState({
-        p_name: '',
+        patient_name: '',
         department: '',
         doctor_id: '',
         date: '',
@@ -101,7 +101,7 @@ const AddAppointment = () => {
                 <h1>Add Appointment</h1>
                 <div>
                     <input 
-                        name="p_name" 
+                        name="patient_name" 
                         placeholder="Patient Name" 
                         onChange={handleChange} 
                         required 
